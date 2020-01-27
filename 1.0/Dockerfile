@@ -24,7 +24,7 @@ RUN yum install -y wget openssl sed &&\
 RUN mkdir -p ${NGINX_SSL_CERTS_PATH}
 
 #ADD ssl/* "${NGINX_SSL_CERTS_PATH}/"
-ADD vhosts/*  "${NGINX_CONFIGURATION_VHOST_PATH}/"
+ADD vhosts  "${NGINX_CONFIGURATION_VHOST_PATH}/"
 ADD nginx.conf "${NGINX_CONFIGURATION_PATH}/"
 
 # Fix permissions
