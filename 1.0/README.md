@@ -28,7 +28,7 @@ Añadimos desde el catálogo a nuestro proyecto clientes una template de MySQL c
 - root pass: 1234
 - esquema: clientesdb
 
-# DEPLOYMENT
+## APP DEPLOYMENT
 
 ### A) PRETASK
 
