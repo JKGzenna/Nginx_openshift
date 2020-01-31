@@ -5,18 +5,18 @@ un archivo llamado 'password' en el que incluiremos nuestra 'encrypt-key' para p
 los ejecutables '.jar' desde la carpeta 'latest_version' con los scripts 'decrypt' y 'encrypt'
 
 ```
-sudo cd /etc
-sudo mkdir secret-volume
-cd secret-volume
-sudo vi password
-## METEMOS AQUÍ LA 'encrypt-key' ##
-## 'INSERT', LA ESCRIBIMOS Y SALIMOS DANDO A 'ESC' Y ESCRIBIENDO ':wq' Y DANDO 'ENTER' ##
+  sudo cd /etc
+  sudo mkdir secret-volume
+  cd secret-volume
+  sudo vi password
+  ## METEMOS AQUÍ LA 'encrypt-key' ##
+  ## 'INSERT', LA ESCRIBIMOS Y SALIMOS DANDO A 'ESC' Y ESCRIBIENDO ':wq' Y DANDO 'ENTER' ##
 ```
 
 ## CREATE OSH PROJECT
 
 ```
-oc new-project clientes
+  oc new-project clientes
 ```
 
 ## CREATE MYSQL DATABASE
@@ -37,7 +37,7 @@ Añadimos desde el catálogo a nuestro proyecto clientes una template de MySQL c
 - Creamos una clave ssh en nuestra máquina con el siguiente comando
 
 ```
-ssh-keygen 
+  ssh-keygen 
 ```
 - Damos enter a todo y dejamos el nombre como está ('id_rsa' e 'id_rsa.pub'), o si queremos lo podemos cambiar, eso no importa, pero si dejarlo sin passphrase, lo dejamos en blanco y damos enter
 
@@ -61,20 +61,20 @@ dichas templates y que es 'GestionClientes_openshift_templates'
 ##### - CREATE WEBSERVER NGINX OPENSHIFT:
 
 ```
-oc process -f build_webserver_template.yaml -p APPLICATION_NAME=nginx-gestion \
--p SOURCE_REPOSITORY_URL=https://github.com/JKGzenna/Nginx_openshift.git -p CONTEXT_DIR='1.0' \
--p APPLICATION_PORT_CLIENTES=8448 -p SOURCE_SECRET=github-user -p APPLICATION_TAG=v1.0 \
--p SOURCE_REPOSITORY_REF=master | oc apply -f-
+  oc process -f build_webserver_template.yaml -p APPLICATION_NAME=nginx-gestion \
+  -p SOURCE_REPOSITORY_URL=https://github.com/JKGzenna/Nginx_openshift.git -p CONTEXT_DIR='1.0' \
+  -p APPLICATION_PORT_CLIENTES=8448 -p SOURCE_SECRET=github-user -p APPLICATION_TAG=v1.0 \
+  -p SOURCE_REPOSITORY_REF=master | oc apply -f-
 ```
 
 ##### - CREATE CLIENTESAPP OPENSHIFT:
 
 ```
-oc process -f build_clientesapp_template.yaml -p APPLICATION_NAME=clientesapp \
--p SOURCE_REPOSITORY_URL=https://github.com/JKGzenna/GestionClientes_openshift.git \
--p CONTEXT_DIR='1.0-encrypt' -p SOURCE_SECRET=github-user -p APPLICATION_PORT=8081 \
--p NGINX_SERVICE_NAME=nginx-gestion -p NGINX_PORT=8448 \
--p SW_VERSION=spring-boot-jpa-1.0 -p HOSTNAME_HTTP= -p SOURCE_REPOSITORY_REF=create | oc apply -f-
+  oc process -f build_clientesapp_template.yaml -p APPLICATION_NAME=clientesapp \
+  -p SOURCE_REPOSITORY_URL=https://github.com/JKGzenna/GestionClientes_openshift.git \
+  -p CONTEXT_DIR='1.0-encrypt' -p SOURCE_SECRET=github-user -p APPLICATION_PORT=8081 \
+  -p NGINX_SERVICE_NAME=nginx-gestion -p NGINX_PORT=8448 \
+  -p SW_VERSION=spring-boot-jpa-1.0 -p HOSTNAME_HTTP= -p SOURCE_REPOSITORY_REF=create | oc apply -f-
 ```
 
 ### C) POST TASKS 
@@ -100,10 +100,10 @@ esas imágenes del servidor se pierden
 
 - Editamos el clientesapp deploymentconfig y añadimos las bases de datos que pudieran estar fuera del proyecto y que hicieran falta
 ```
-    hostAliases:
-     - hostnames:
-         - DEV|PRE|PRO
-       ip: { MYSQL_IP } # Nat IP 
+  hostAliases:
+   - hostnames:
+       - DEV|PRE|PRO
+     ip: { MYSQL_IP } # Nat IP 
 ```
 ##### - CONFIGMAPS
   
@@ -112,16 +112,16 @@ esas imágenes del servidor se pierden
  
   1) Create a ConfigMap from directories, specific files, or literal values:
   
-   ```sh
-     $ oc create configmap { SERVICE_NAME }-config --from-file=conf/
+   ```
+     oc create configmap { SERVICE_NAME }-config --from-file=conf/
   ```
   
   2) Consuming ConfigMaps in Pods:
   
-  ```sh
-     $ oc volume dc/{ SERVICE_NAME } --overwrite --add -t configmap  \
-       -m { PATH_CONFIGURATION }--name={ SERVICE_NAME }-config \
-       --configmap-name={ SERVICE_NAME }-config 
+  ```
+     oc volume dc/{ SERVICE_NAME } --overwrite --add -t configmap  \
+     -m { PATH_CONFIGURATION }--name={ SERVICE_NAME }-config \
+     --configmap-name={ SERVICE_NAME }-config 
   ```
   
 ##### - REQUIRED DEPLOYMENT VARIABLES 
@@ -134,12 +134,12 @@ esas imágenes del servidor se pierden
 
 - CLEAN WHORE APP
 
-```sh 
-for i in $(oc get all | grep -w "{ SERVICE_NAME }" | awk '{print $1}') ; do oc delete $i; done
+```
+  for i in $(oc get all | grep -w "{ SERVICE_NAME }" | awk '{print $1}') ; do oc delete $i; done
 ```
 
 - DELETE ALL ON A PROJECT
 
-```sh 
-oc delete all --all -n project
+```
+  oc delete all --all -n project
 ```
