@@ -1,5 +1,18 @@
 # Nginx_openshift
 
+- Creamos en nuestra máquina dónde tenemos nuestro repositorio git local, y en la ruta '/etc/secret-volume' 
+un archivo llamado 'password' en el que incluiremos nuestra 'encrypt-key' para poder encriptar y desencriptar
+los ejecutables '.jar' desde la carpeta 'latest_version' con los scripts 'decrypt' y 'encrypt'
+
+```
+sudo cd /etc
+sudo mkdir secret-volume
+cd secret-volume
+sudo vi password
+## METEMOS AQUÍ LA 'encrypt-key' ##
+## 'INSERT', LA ESCRIBIMOS Y SALIMOS DANDO A 'ESC' Y ESCRIBIENDO ':wq' Y DANDO 'ENTER' ##
+```
+
 ## CREATE OSH PROJECT
 
 ```
